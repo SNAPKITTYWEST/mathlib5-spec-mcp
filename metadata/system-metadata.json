@@ -1,0 +1,347 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "MATHLIB5 VSCP Meta-Architecture",
+  "version": "1.0.0",
+  "description": "Comprehensive metadata for AI system introspection and autonomous navigation",
+  "sovereign": true,
+  "wormSealed": false,
+  "verificationStatus": "awaiting_worm_seal",
+  "lastUpdated": "2026-07-10T17:00:00Z",
+  "author": "SNAPKITTYWEST",
+  "license": "Apache-2.0",
+  
+  "layers": [
+    {
+      "id": 1,
+      "name": "APL Frontend",
+      "language": "Haskell",
+      "tool": "Megaparsec",
+      "path": "mathlib5/layers/apl/",
+      "description": "APL syntax parsing and abstract syntax tree generation for mathematical expressions",
+      "dependencies": [],
+      "produces": ["AST"],
+      "consumes": ["APL Source Code"],
+      "mcpResource": "urn:mathlib5:layer:1",
+      "mcpTools": ["parse_apl"],
+      "keywords": ["parsing", "APL", "syntax", "abstract-syntax-tree", "megaparsec"]
+    },
+    {
+      "id": 2,
+      "name": "S-Expr IR",
+      "language": "Haskell",
+      "format": "Canonical",
+      "path": "mathlib5/layers/sexpr/",
+      "description": "Intermediate representation in canonical S-expression format for cross-language compatibility",
+      "dependencies": [1],
+      "produces": ["S-Expression IR"],
+      "consumes": ["AST"],
+      "mcpResource": "urn:mathlib5:layer:2",
+      "mcpTools": ["generate_sexpr"],
+      "keywords": ["intermediate-representation", "s-expression", "canonical", "cross-language"]
+    },
+    {
+      "id": 3,
+      "name": "Liquid Haskell",
+      "language": "Haskell",
+      "role": "Refinement",
+      "path": "mathlib5/layers/liquid/",
+      "description": "Type refinement and formal verification using Liquid Haskell for proving properties about Haskell code",
+      "dependencies": [2],
+      "produces": ["Refined Types", "Verification Proofs"],
+      "consumes": ["S-Expression IR"],
+      "mcpResource": "urn:mathlib5:layer:3",
+      "mcpTools": ["refine_types"],
+      "keywords": ["type-refinement", "liquid-haskell", "verification", "formal-proofs"]
+    },
+    {
+      "id": 4,
+      "name": "Lean 4 HOL",
+      "language": "Lean4",
+      "role": "Theorem Proving",
+      "path": "mathlib5/layers/hol/",
+      "description": "Higher-order logic theorem proving system for mathematical verification and proof construction",
+      "dependencies": [2, 3],
+      "produces": ["Theorems", "Proofs", "Mathematical Verification"],
+      "consumes": ["S-Expression IR", "Refined Types"],
+      "mcpResource": "urn:mathlib5:layer:4",
+      "mcpTools": ["prove_theorem"],
+      "keywords": ["lean4", "theorem-proving", "higher-order-logic", "mathematical-verification"]
+    },
+    {
+      "id": 5,
+      "name": "C-- Kernel",
+      "language": "C--",
+      "role": "Verified Assembly",
+      "path": "mathlib5/kernel/verified_kernel.cm",
+      "description": "Verified low-level kernel implementation providing a trusted computing base for the system",
+      "dependencies": [4],
+      "produces": ["Verified Kernel", "Trusted Computing Base"],
+      "consumes": ["Theorems", "Proofs"],
+      "mcpResource": "urn:mathlib5:layer:5",
+      "mcpTools": ["verify_kernel"],
+      "keywords": ["c--", "kernel", "verified", "assembly", "trusted-computing"]
+    },
+    {
+      "id": 6,
+      "name": "FOL/CodeQL",
+      "language": "C99/Datalog",
+      "role": "Meta-Validation",
+      "path": "mathlib5/layers/fol/",
+      "description": "First-order logic validation and CodeQL analysis for meta-level verification of system properties",
+      "dependencies": [2, 5],
+      "produces": ["Validation Results", "Security Proofs"],
+      "consumes": ["S-Expression IR", "Verified Kernel"],
+      "mcpResource": "urn:mathlib5:layer:6",
+      "mcpTools": ["validate_fol"],
+      "keywords": ["first-order-logic", "codeql", "meta-validation", "security", "datalog"]
+    },
+    {
+      "id": 7,
+      "name": "ASP/Prolog",
+      "language": "Clingo/SWI",
+      "role": "Solver Dispatch",
+      "path": "mathlib5/layers/asp/",
+      "description": "Answer Set Programming and Prolog solver integration for constraint solving and logical reasoning",
+      "dependencies": [2, 6],
+      "produces": ["Solutions", "Constraints", "Logical Inferences"],
+      "consumes": ["S-Expression IR", "Validation Results"],
+      "mcpResource": "urn:mathlib5:layer:7",
+      "mcpTools": ["solve_asp"],
+      "keywords": ["answer-set-programming", "prolog", "clingo", "constraint-solving", "logical-reasoning"]
+    },
+    {
+      "id": 8,
+      "name": "PRISM/P-NP",
+      "language": "Rust",
+      "role": "Multi-Agent Search",
+      "path": "mathlib5/layers/prism-skills/",
+      "description": "Probabilistic reasoning and P/NP complexity analysis for multi-agent search and optimization",
+      "dependencies": [2, 4, 7],
+      "produces": ["Search Results", "Optimization Solutions", "Complexity Analysis"],
+      "consumes": ["S-Expression IR", "Theorems", "Solutions"],
+      "mcpResource": "urn:mathlib5:layer:8",
+      "mcpTools": ["search_prism"],
+      "keywords": ["prism", "p-np", "multi-agent", "search", "optimization", "probabilistic"]
+    },
+    {
+      "id": 9,
+      "name": "WORM Chain",
+      "language": "Rust",
+      "role": "Tamper-Evidence",
+      "path": ".worm/",
+      "description": "Write-Once Read-Many tamper-evident ledger for cryptographic verification of system state and history",
+      "dependencies": [5, 8],
+      "produces": ["Tamper-Evident Logs", "Cryptographic Proofs", "WORM Seals"],
+      "consumes": ["Verified Kernel", "Search Results"],
+      "mcpResource": "urn:mathlib5:layer:9",
+      "mcpTools": ["seal_worm"],
+      "keywords": ["worm", "tamper-evident", "ledger", "cryptographic", "seal", "immutable"]
+    },
+    {
+      "id": 10,
+      "name": "Sorry Hunter",
+      "language": "Rust",
+      "role": "Automated Closing",
+      "path": "mathlib5/layers/sorryhunter/",
+      "description": "Automated proof completion for Lean sorries, attempting to close incomplete proofs in the theorem prover",
+      "dependencies": [4, 8, 9],
+      "produces": ["Completed Proofs", "Proof Suggestions"],
+      "consumes": ["Theorems", "Search Results", "Tamper-Evident Logs"],
+      "mcpResource": "urn:mathlib5:layer:10",
+      "mcpTools": ["hunt_sorries"],
+      "keywords": ["sorry-hunter", "lean", "proof-completion", "automated", "sorry"]
+    }
+  ],
+  
+  "agents": {
+    "cipher": {
+      "name": "Cipher",
+      "role": "Verification Strategy",
+      "description": "Responsible for formal proof validation, type checking, constraint solving, and invariant verification across the system",
+      "capabilities": [
+        "Formal proof validation",
+        "Type checking",
+        "Constraint solving",
+        "Invariant verification",
+        "Theorem proving assistance",
+        "Verification strategy planning"
+      ],
+      "language": "Lean4/Haskell",
+      "mcpResource": "urn:mathlib5:agent:cipher",
+      "accessesLayers": [3, 4, 10]
+    },
+    "forge": {
+      "name": "Forge",
+      "role": "Code Generation",
+      "description": "Generates code across all system languages, including APL, Haskell, Lean, and Rust bindings",
+      "capabilities": [
+        "APL code synthesis",
+        "Haskell compilation",
+        "Lean proof generation",
+        "Rust binding creation",
+        "Cross-language translation",
+        "Code optimization"
+      ],
+      "language": "Multi-language",
+      "mcpResource": "urn:mathlib5:agent:forge",
+      "accessesLayers": [1, 2, 3, 4, 5, 8]
+    },
+    "sentinel": {
+      "name": "Sentinel",
+      "role": "Audit & Security",
+      "description": "Performs security audits, vulnerability scanning, cryptographic verification, and access control",
+      "capabilities": [
+        "Security audit",
+        "Vulnerability scanning",
+        "Cryptographic verification",
+        "Access control",
+        "Threat detection",
+        "Compliance checking"
+      ],
+      "language": "Rust/Haskell",
+      "mcpResource": "urn:mathlib5:agent:sentinel",
+      "accessesLayers": [5, 6, 9]
+    },
+    "vault": {
+      "name": "Vault",
+      "role": "Memory Persistence",
+      "description": "Handles WORM chain storage, state persistence, version control, and data retrieval",
+      "capabilities": [
+        "WORM chain storage",
+        "State persistence",
+        "Version control",
+        "Data retrieval",
+        "Historical querying",
+        "Immutable storage"
+      ],
+      "language": "Rust",
+      "mcpResource": "urn:mathlib5:agent:vault",
+      "accessesLayers": [9]
+    },
+    "oracle": {
+      "name": "Oracle",
+      "role": "Analysis & Scaffolding",
+      "description": "Provides system analysis, architecture introspection, dependency mapping, and performance profiling",
+      "capabilities": [
+        "System analysis",
+        "Architecture introspection",
+        "Dependency mapping",
+        "Performance profiling",
+        "Bottleneck identification",
+        "Scalability analysis"
+      ],
+      "language": "Python/Janet",
+      "mcpResource": "urn:mathlib5:agent:oracle",
+      "accessesLayers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    },
+    "nexus": {
+      "name": "Nexus",
+      "role": "Swarm Coordination",
+      "description": "Orchestrates multi-agent tasks, including task distribution, result aggregation, and conflict resolution",
+      "capabilities": [
+        "Multi-agent orchestration",
+        "Task distribution",
+        "Result aggregation",
+        "Conflict resolution",
+        "Load balancing",
+        "Priority management"
+      ],
+      "language": "Rust",
+      "mcpResource": "urn:mathlib5:agent:nexus",
+      "accessesLayers": [8, 9]
+    },
+    "solarium": {
+      "name": "Solarium",
+      "role": "Semantic Knowledge",
+      "description": "Provides document chunking, vector embedding, semantic search, and contextual retrieval for the system",
+      "capabilities": [
+        "Document chunking",
+        "Vector embedding",
+        "Semantic search",
+        "Contextual retrieval",
+        "Knowledge graph construction",
+        "Similarity matching"
+      ],
+      "language": "ClojureScript",
+      "mcpResource": "urn:mathlib5:agent:solarium",
+      "accessesLayers": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    }
+  },
+  
+  "security": {
+    "gate": "Plasma Gate (Ed25519)",
+    "encryption": "AES-256-GCM",
+    "integrity": "SHA-256 Merkle",
+    "authentication": "Ed25519 signatures",
+    "keyManagement": "Hierarchical deterministic",
+    "wormChain": {
+      "algorithm": "SHA-256",
+      "linking": "Merkle tree",
+      "sealInterval": "6 hours",
+      "verification": "Automated"
+    }
+  },
+  
+  "mcp": {
+    "serverName": "mathlib5-spec-mcp",
+    "serverVersion": "1.0.0",
+    "protocol": "Model Context Protocol",
+    "capabilities": {
+      "tools": true,
+      "resources": true,
+      "introspection": true
+    },
+    "endpoints": {
+      "architecture": "urn:mathlib5:architecture",
+      "layers": "urn:mathlib5:layers",
+      "agents": "urn:mathlib5:agents",
+      "security": "urn:mathlib5:security",
+      "metadata": "urn:mathlib5:metadata",
+      "summary": "urn:mathlib5:summary"
+    },
+    "tools": [
+      {"name": "get_architecture", "description": "Get full architecture definition"},
+      {"name": "get_layer", "description": "Get specific layer by ID"},
+      {"name": "list_layers", "description": "List all layers"},
+      {"name": "list_agents", "description": "List all agents"},
+      {"name": "get_agent_capabilities", "description": "Get agent capabilities"},
+      {"name": "get_security_config", "description": "Get security configuration"},
+      {"name": "list_tools", "description": "List all available tools"},
+      {"name": "parse_apl", "description": "Parse APL code"},
+      {"name": "generate_sexpr", "description": "Generate S-expression IR"},
+      {"name": "refine_types", "description": "Apply Liquid Haskell refinement"},
+      {"name": "prove_theorem", "description": "Prove Lean theorem"},
+      {"name": "verify_kernel", "description": "Verify C-- kernel"},
+      {"name": "validate_fol", "description": "Validate FOL formula"},
+      {"name": "solve_asp", "description": "Solve ASP program"},
+      {"name": "search_prism", "description": "Multi-agent search"},
+      {"name": "seal_worm", "description": "Seal WORM chain"},
+      {"name": "hunt_sorries", "description": "Hunt Lean sorries"},
+      {"name": "query_solarium", "description": "Query semantic knowledge"},
+      {"name": "coordinate_swarm", "description": "Coordinate multi-agent task"},
+      {"name": "audit_system", "description": "Perform system audit"}
+    ]
+  },
+  
+  "integration": {
+    "janet": "spec/architecture.janet",
+    "hy": "spec/architecture.hy",
+    "typescript": "src/architecture.ts",
+    "mcpServer": "src/index.ts",
+    "compatibility": ["Janet 1.30+", "Hy 0.26+", "Node.js 20+", "MCP SDK 0.6+"]
+  },
+  
+  "usage": {
+    "aiIntrospection": "AI agents can query the MCP server to understand the full system architecture and capabilities",
+    "autonomousNavigation": "Agents can discover layers, tools, and dependencies without human intervention",
+    "taskDelegation": "The MCP server provides metadata for intelligent task delegation across agents",
+    "verification": "All system state can be verified through WORM chain integration"
+  },
+  
+  "links": {
+    "repository": "https://github.com/SNAPKITTYWEST/mathlib5-spec-mcp",
+    "documentation": "https://github.com/SNAPKITTYWEST/mathlib5-spec-mcp/README.md",
+    "architecture": "https://github.com/SNAPKITTYWEST/mathlib5",
+    "agentos": "https://github.com/SNAPKITTYWEST/agentos"
+  }
+}
